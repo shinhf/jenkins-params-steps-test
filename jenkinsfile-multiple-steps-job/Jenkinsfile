@@ -1,0 +1,27 @@
+pipeline {
+    agent {
+        node 'master'
+    }
+    parameters {
+        string(name: 'custom_var', defaultValue: '')
+    }
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                step([$class: 'WsCleanup'])
+                git 'https://github.com/shinhf/jenkins-params-steps-test.git'
+            }
+        }
+        stage('Hello') {
+            steps {
+                sh set-parameter.sh
+            }
+        }
+        stage('TEST') {
+            steps {
+                sh use-parameter.sh
+            }
+        }
+    }
+}
